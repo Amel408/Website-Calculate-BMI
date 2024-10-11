@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Body Mass Index (BMI) Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-image: url('C:/Users/Amelia Christine/Downloads/Biru Ilustratif Hari Kesehatan Nasional Instagram Post.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        form {
+            max-width: 50%;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #b6dae9;
+            border: 1px solid #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #b4e2f5;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            border-color: #3ab83e;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            height: 40px;
+            background-color: #39a935;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2c8e2b;
+        }
+
+        #result {
+            max-width: 50%;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #3ab83e;
+            border: 1px solid #3ab83e;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .health-guidelines {
+            max-width: 50%;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .health-guidelines h2 {
+            color: #3ab83e;
+        }
+
+        .health-guidelines ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; font-style: italic;">Calculate BMI</h1>
+    <form>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name">
+        <br><br>
+
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender">
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+        </select>
+        <br><br>
+
+        <label for="height">Height (cm)</label>
+        <input type="number" id="height" name="height">
+        <br><br>
+
+        <label for="weight">Weight (kg)</label>
+        <input type="number" id="weight" name="weight">
+        <br><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+    <div id="result"></div>
+
+    <div class="health-guidelines" id="health-guidelines"></div>
+
+    <script>
+        const form = document.querySelector('form');
+        const result = document.querySelector('#result');
+        const healthGuidelines = document.querySelector('#health-guidelines');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.querySelector('input[name="name"]').value;
+            const gender = document.querySelector('select[name="gender"]').value;
+            const height = parseFloat(document.querySelector('input[name="height"]').value);
+            const weight = parseFloat(document.querySelector('input[name="weight"]').value);
+
+            // Calculate BMI
+            const bmi = (weight / Math.pow(height / 100, 2)).toFixed(2);
+
+            let guidelines;
+            let genderSpecificAdvice = "";
+
+            // Provide results based on BMI category and relevant health guidelines
+            if (gender === 'female') {
+                genderSpecificAdvice = "<li>Pay attention to higher iron and calcium intake, especially for active women or those entering menopause.</li>";
+            } else {
+                genderSpecificAdvice = "<li>Males are advised to maintain protein intake to support muscle mass and focus on heart health by reducing saturated fat consumption.</li>";
+            }
+
+            if (bmi < 18.5) {
+                result.innerText = `${name}, your BMI is ${bmi}. You are classified as underweight.`;
+                guidelines = `
+                    <h2>Guidelines for Underweight</h2>
+                    <ul>
+                        <li>Increase calorie intake from healthy foods such as nuts, avocados, and olive oil.</li>
+                        <li>Consume protein-rich foods like lean meats, fish, eggs, and dairy products to build muscle mass.</li>
+                        <li>Add healthy snacks between meals like dried fruits, nuts, or yogurt.</li>
+                        <li>Engage in light exercise such as yoga or strength training to help gain weight healthily.</li>
+                        ${genderSpecificAdvice}
+                    </ul>
+                `;
+            } else if (bmi >= 18.5 && bmi <= 22.9) {
+                result.innerText = `${name}, your BMI is ${bmi}. You have a healthy weight. Keep it up!`;
+                guidelines = `
+                    <h2>Guidelines for Healthy Weight</h2>
+                    <ul>
+                        <li>Continue consuming a balanced diet with appropriate portions, containing protein, complex carbohydrates, healthy fats, and fiber.</li>
+                        <li>Increase intake of green vegetables, fruits, and whole grains for long-term health support.</li>
+                        <li>Engage in regular physical activity, such as jogging, cycling, or swimming for at least 30 minutes a day.</li>
+                        <li>Maintain adequate sleep patterns (7-9 hours per night) to support body metabolism.</li>
+                        ${genderSpecificAdvice}
+                    </ul>
+                `;
+            } else if (bmi >= 23 && bmi <= 24.9) {
+                result.innerText = `${name}, your BMI is ${bmi}. You are classified as overweight.`;
+                guidelines = `
+                    <h2>Guidelines for Overweight</h2>
+                    <ul>
+                        <li>Reduce intake of high-calorie foods, saturated fats, and sugars such as fast food and sugary drinks.</li>
+                        <li>Increase consumption of vegetables and fruits, and choose complex carbohydrates like brown rice and whole grains.</li>
+                        <li>Engage in aerobic exercise such as running or cycling for 45 minutes, 3-5 times a week.</li>
+                        <li>Drink plenty of water and avoid high-calorie drinks like soda and fruit juices with added sugars.</li>
+                        ${genderSpecificAdvice}
+                    </ul>
+                `;
+            } else if (bmi >= 25 && bmi <= 29.9) {
+                result.innerText = `${name}, your BMI is ${bmi}. You are classified as obesity level 1.`;
+                guidelines = `
+                    <h2>Guidelines for Obesity Level 1</h2>
+                    <ul>
+                        <li>Consult with a nutritionist for a meal plan tailored to your needs.</li>
+                        <li>Reduce portion sizes and limit daily calorie intake, especially from processed and fatty foods.</li>
+                        <li>Regularly engage in heart-rate-increasing exercises such as brisk walking, running, or cycling.</li>
+                        <li>Avoid eating late at night and try to eat small portions but frequently.</li>
+                        ${genderSpecificAdvice}
+                    </ul>
+                `;
+            } else if (bmi >= 30) {
+                result.innerText = `${name}, your BMI is ${bmi}. You are classified as obesity level 2.`;
+                guidelines = `
+                    <h2>Guidelines for Obesity Level 2</h2>
+                    <ul>
+                        <li>Consult with a doctor or nutritionist to plan safe and effective weight loss.</li>
+                        <li>Reduce intake of simple carbohydrates and processed foods, and increase fiber intake from vegetables and fruits.</li>
+                        <li>Engage in intensive physical activities, such as aerobic exercises or interval training, at least 5 days a week.</li>
+                        <li>Pay attention to sleep habits and reduce stress to help effectively lose weight.</li>
+                        ${genderSpecificAdvice}
+                    </ul>
+                `;
+            }
+
+            healthGuidelines.innerHTML = guidelines;
+        });
+    </script>
+</body>
+</html>
